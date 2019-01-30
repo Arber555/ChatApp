@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+    <head>
+        <title>ChatApp</title>
+        <style>
+            * {margin: 0; padding: 0;}
+ 
+            div {
+                margin: 20px;
+            }
+            
+            ul {
+                list-style-type: none;
+                width: 500px;
+            }
+            
+            h3 {
+                font: bold 20px/1.5 Helvetica, Verdana, sans-serif;
+            }
+            
+            li img {
+                float: left;
+                margin: 0 15px 0 0;
+            }
+            
+            li p {
+                font: 200 12px/1.5 Georgia, Times New Roman, serif;
+            }
+            
+            li {
+                padding: 10px;
+                overflow: auto;
+            }
+            
+            li:hover {
+                background: #eee;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <ul id='list'>
+                <!-- <li>
+                    <img src="https://pngimage.net/wp-content/uploads/2018/06/user-login-images-png-5.png" width="50" />
+                    <h3>Name</h3>
+                </li> -->
+            </ul>
+        </div>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+        <script>
+            const chat = (id) => {
+                window.localStorage.setItem('userId', id);
+                window.location.replace('http://localhost:3000/chat');
+            }
+            
+            $(() => {
+                let socket = io('http://localhost:3000');
+
+                socket.emit('user', window.localStorage.getItem('username'));
+
+                socket.on('getUsers', (data) => {
+                    $('#list').append("");
+                    for(let user in data) {
+                        $('#list').append("<li onclick='chat(\""+ user +"\")'> <img src='https://pngimage.net/wp-content/uploads/2018/06/user-login-images-png-5.png' width='50' /><h3>" + user + "</h3></li>");
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
